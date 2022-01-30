@@ -14,6 +14,6 @@ public class UploadProperties {
     String types;
 
     public List<String> getSupportedTypesAsList() {
-        return Arrays.stream(types.split(",")).toList();
+        return Arrays.stream(types.trim().split(",")).toList();
     }
 }

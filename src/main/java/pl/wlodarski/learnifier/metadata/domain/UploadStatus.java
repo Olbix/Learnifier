@@ -1,4 +1,4 @@
-package pl.wlodarski.learnifier.upload.domain;
+package pl.wlodarski.learnifier.metadata.domain;
 
 public enum UploadStatus {
     UPLOADING {
