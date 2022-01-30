@@ -7,7 +7,7 @@ public class UpdateStatusResult {
     UploadStatus newStatus;
     boolean revoked;
 
-    static UpdateStatusResult ok(UploadStatus newStatus) {
+    public static UpdateStatusResult ok(UploadStatus newStatus) {
         return new UpdateStatusResult(newStatus, false);
     }
 }
