@@ -15,12 +15,12 @@ import java.util.Map;
 public class UploadExceptionHandler {
 
     @ExceptionHandler(IllegalContentTypeException.class)
-    public ResponseEntity<Object> handleIllegalContentTypeException(IllegalContentTypeException ex) {
+    public ResponseEntity<Object> handleIllegalContentTypeException(final IllegalContentTypeException ex) {
         return handleError(HttpStatus.BAD_REQUEST, List.of(ex.getMessage()));
     }
 
-    private ResponseEntity<Object> handleError(HttpStatus status, List<String> errors) {
-        Map<String, Object> body = new LinkedHashMap<>();
+    private ResponseEntity<Object> handleError(final HttpStatus status, final List<String> errors) {
+        final Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", new Date());
         body.put("status", status.value());
         body.put("errors", errors);

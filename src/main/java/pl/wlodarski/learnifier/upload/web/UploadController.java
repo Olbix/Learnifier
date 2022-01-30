@@ -34,10 +34,10 @@ public class UploadController {
     private final MetadataService metadataService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> saveUpload(@RequestPart("file") MultipartFile file) {
-        Upload upload = uploadService.save(toSaveCommand(file));
+    public ResponseEntity<?> saveUpload(@RequestPart("file") final MultipartFile file) {
+        final Upload upload = uploadService.save(toSaveCommand(file));
 
-        URI uri = ServletUriComponentsBuilder
+        final URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(upload.getId()).toUri();
 
@@ -45,8 +45,8 @@ public class UploadController {
     }
 
     @PatchMapping(value = {"{id}"}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> adjustUpload(@PathVariable UUID id, @RequestPart("file") MultipartFile file) {
-        UpdateStatus update = uploadService.modify(toModifyUploadCommand(id, file));
+    public ResponseEntity<?> adjustUpload(@PathVariable final UUID id, @RequestPart("file") final MultipartFile file) {
+        final UpdateStatus update = uploadService.modify(toModifyUploadCommand(id, file));
         if (update == UpdateStatus.NOT_FOUND) {
             return ResponseEntity.notFound().build();
         }
@@ -57,16 +57,16 @@ public class UploadController {
     }
 
     @GetMapping("{id}/file")
-    public ResponseEntity<Resource> getUploadFile(@PathVariable String id) {
-        Optional<Upload> optionalUpload = uploadService.getById(UUID.fromString(id));
+    public ResponseEntity<Resource> getUploadFile(@PathVariable final String id) {
+        final Optional<Upload> optionalUpload = uploadService.getById(UUID.fromString(id));
         if (optionalUpload.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        Upload upload = optionalUpload.get();
-        Metadata metadata = upload.getMetadata();
+        final Upload upload = optionalUpload.get();
+        final Metadata metadata = upload.getMetadata();
 
-        String contentDisposition = "attachment; filename=\"" + metadata.getFileName() + "\"";
-        Resource resource = new ByteArrayResource(upload.getContent());
+        final String contentDisposition = "attachment; filename=\"" + metadata.getFileName() + "\"";
+        final Resource resource = new ByteArrayResource(upload.getContent());
 
         return ResponseEntity
                 .ok()
@@ -76,8 +76,8 @@ public class UploadController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUpload(@PathVariable UUID id) {
-        boolean removed = uploadService.removeById(id);
+    public ResponseEntity<?> deleteUpload(@PathVariable final UUID id) {
+        final boolean removed = uploadService.removeById(id);
         if (removed) {
             return ResponseEntity.noContent().build();
         }
@@ -85,14 +85,14 @@ public class UploadController {
     }
 
     @SneakyThrows
-    private ModifyUploadCommand toModifyUploadCommand(UUID id, MultipartFile file) {
-        Metadata fileMetadata = metadataService.readMetadata(file);
+    private ModifyUploadCommand toModifyUploadCommand(final UUID id, final MultipartFile file) {
+        final Metadata fileMetadata = metadataService.readMetadata(file);
         return new ModifyUploadCommand(id, file.getBytes(), fileMetadata);
     }
 
     @SneakyThrows
-    SaveUploadCommand toSaveCommand(MultipartFile file) {
-        Metadata fileMetadata = metadataService.readMetadata(file);
+    SaveUploadCommand toSaveCommand(final MultipartFile file) {
+        final Metadata fileMetadata = metadataService.readMetadata(file);
         return new SaveUploadCommand(file.getBytes(), fileMetadata);
     }
 

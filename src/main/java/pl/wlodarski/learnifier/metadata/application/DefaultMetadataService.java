@@ -7,26 +7,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.wlodarski.learnifier.metadata.application.port.MetadataService;
 import pl.wlodarski.learnifier.metadata.domain.Metadata;
-import pl.wlodarski.learnifier.upload.application.port.UploadService;
 import pl.wlodarski.learnifier.upload.domain.Upload;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Slf4j
 public class DefaultMetadataService implements MetadataService {
 
-    private final UploadService uploadService;
     private final Tika tika = new Tika();
 
-    public DefaultMetadataService(UploadService uploadService) {
-        this.uploadService = uploadService;
-    }
-
     @Override
-    public Metadata readMetadata(MultipartFile file) {
+    public Metadata readMetadata(final MultipartFile file) {
         return Metadata.builder()
                 .contentType(obtainContentType(file.getContentType(), detectedMimeType(file)))
                 .fileName(file.getOriginalFilename())
@@ -35,17 +28,12 @@ public class DefaultMetadataService implements MetadataService {
     }
 
     @Override
-    public Optional<Metadata> obtainUploadMetadataById(UUID id) {
-        Optional<Upload> optionalUpload = uploadService.getById(id);
-        if (optionalUpload.isEmpty()) {
-            return Optional.empty();
-        }
-        Upload upload = optionalUpload.get();
+    public Optional<Metadata> obtainUploadMetadata(final Upload upload) {
         return Optional.of(upload.getMetadata());
     }
 
 
-    private String obtainContentType(String fileContentType, String detectedMimeType) {
+    private String obtainContentType(final String fileContentType, final String detectedMimeType) {
         if (StringUtils.isBlank(fileContentType)) {
             return detectedMimeType;
         }
@@ -56,11 +44,11 @@ public class DefaultMetadataService implements MetadataService {
         return fileContentType;
     }
 
-    private String detectedMimeType(MultipartFile file) {
+    private String detectedMimeType(final MultipartFile file) {
         String detect = null;
         try {
             detect = tika.detect(file.getBytes());
-        } catch (IOException e) {
+        } catch (final IOException e) {
             log.debug("Cannot detect content type", e);
         }
         return detect;

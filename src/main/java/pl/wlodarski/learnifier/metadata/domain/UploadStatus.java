@@ -3,18 +3,16 @@ package pl.wlodarski.learnifier.metadata.domain;
 public enum UploadStatus {
     UPLOADING {
         @Override
-        public UpdateStatusResult updateStatus(UploadStatus status) {
-            switch (status) {
-                case READY:
-                    return UpdateStatusResult.ok(READY);
-                default:
-                    return super.updateStatus(status);
+        public UpdateStatusResult updateStatus(final UploadStatus status) {
+            if (status == UploadStatus.READY) {
+                return UpdateStatusResult.ok(READY);
             }
+            return super.updateStatus(status);
         }
     },
     PROCESSING {
         @Override
-        public UpdateStatusResult updateStatus(UploadStatus status) {
+        public UpdateStatusResult updateStatus(final UploadStatus status) {
             if (status == READY) {
                 return UpdateStatusResult.ok(READY);
             }
@@ -23,7 +21,7 @@ public enum UploadStatus {
     },
     READY {
         @Override
-        public UpdateStatusResult updateStatus(UploadStatus status) {
+        public UpdateStatusResult updateStatus(final UploadStatus status) {
             switch (status) {
                 case PROCESSING:
                     return UpdateStatusResult.ok(PROCESSING);
@@ -36,7 +34,7 @@ public enum UploadStatus {
     },
     DELETING {
         @Override
-        public UpdateStatusResult updateStatus(UploadStatus status) {
+        public UpdateStatusResult updateStatus(final UploadStatus status) {
             if (status == DELETED) {
                 return UpdateStatusResult.ok(DELETED);
             }
@@ -50,7 +48,7 @@ public enum UploadStatus {
         return this.name();
     }
 
-    public UpdateStatusResult updateStatus(UploadStatus status) {
+    public UpdateStatusResult updateStatus(final UploadStatus status) {
         throw new IllegalArgumentException("Unable to mark " + this.name() + " order as " + status.name());
     }
 }

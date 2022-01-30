@@ -19,29 +19,29 @@ public class DefaultUploadService implements UploadService {
     private final UploadProperties uploadProperties;
 
     @Override
-    public Upload save(SaveUploadCommand command) {
-        Metadata metadata = command.getMetadata();
+    public Upload save(final SaveUploadCommand command) {
+        final Metadata metadata = command.getMetadata();
         validateMetadata(metadata);
 
         return inMemoryStorage.upload(toUpload(command));
     }
 
-    private void validateMetadata(Metadata metadata) {
-        String extension = metadata.getContentType();
+    private void validateMetadata(final Metadata metadata) {
+        final String extension = metadata.getContentType();
         if (!isContentTypeSupported(extension)) {
             throw new IllegalContentTypeException("Uploading: " + extension + " content type is not supported!");
         }
     }
 
     @Override
-    public UpdateStatus modify(ModifyUploadCommand command) {
-        UUID id = command.getId();
-        Optional<Upload> optionalUpload = inMemoryStorage.getById(id);
+    public UpdateStatus modify(final ModifyUploadCommand command) {
+        final UUID id = command.getId();
+        final Optional<Upload> optionalUpload = inMemoryStorage.getById(id);
         if (optionalUpload.isEmpty()) {
             return UpdateStatus.NOT_FOUND;
         }
 
-        Upload toBeModified = optionalUpload.get();
+        final Upload toBeModified = optionalUpload.get();
         if (sameMetadata(command, toBeModified)) {
             toBeModified.setContent(command.getContent());
             toBeModified.setMetadata(command.getMetadata());
@@ -50,26 +50,26 @@ public class DefaultUploadService implements UploadService {
         return UpdateStatus.NOT_MODIFIED;
     }
 
-    private boolean sameMetadata(ModifyUploadCommand command, Upload toBeModified) {
+    private boolean sameMetadata(final ModifyUploadCommand command, final Upload toBeModified) {
         return command.getMetadata().getContentType().equals(toBeModified.getMetadata().getContentType());
     }
 
-    private boolean isContentTypeSupported(String contentType) {
+    private boolean isContentTypeSupported(final String contentType) {
         return uploadProperties.getSupportedTypesAsList().contains(contentType);
     }
 
     @Override
-    public Optional<Upload> getById(UUID uuid) {
+    public Optional<Upload> getById(final UUID uuid) {
         return inMemoryStorage.getById(uuid);
     }
 
     @Override
-    public boolean removeById(UUID uuid) {
+    public boolean removeById(final UUID uuid) {
         return inMemoryStorage.remove(uuid);
     }
 
 
-    private Upload toUpload(SaveUploadCommand uploadCommand) {
+    private Upload toUpload(final SaveUploadCommand uploadCommand) {
         return Upload.builder()
                 .content(uploadCommand.getContent())
                 .metadata(uploadCommand.getMetadata())

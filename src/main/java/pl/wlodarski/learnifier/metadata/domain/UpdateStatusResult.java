@@ -5,9 +5,8 @@ import lombok.Value;
 @Value
 public class UpdateStatusResult {
     UploadStatus newStatus;
-    boolean revoked;
 
-    public static UpdateStatusResult ok(UploadStatus newStatus) {
-        return new UpdateStatusResult(newStatus, false);
+    public static UpdateStatusResult ok(final UploadStatus newStatus) {
+        return new UpdateStatusResult(newStatus);
     }
 }

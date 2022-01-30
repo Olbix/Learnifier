@@ -12,17 +12,17 @@ import java.util.concurrent.ConcurrentHashMap;
 public class InMemoryStorage {
     private final Map<UUID, Upload> uploads = new ConcurrentHashMap<>();
 
-    public Upload upload(Upload upload) {
+    public Upload upload(final Upload upload) {
         uploads.put(upload.getId(), upload);
         return upload;
     }
 
-    public Optional<Upload> getById(UUID id) {
+    public Optional<Upload> getById(final UUID id) {
         return Optional.ofNullable(uploads.get(id));
     }
 
-    public synchronized boolean remove(UUID uuid) {
-        Upload remove = uploads.remove(uuid);
+    public synchronized boolean remove(final UUID uuid) {
+        final Upload remove = uploads.remove(uuid);
         return remove != null;
     }
 

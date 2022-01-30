@@ -14,12 +14,12 @@ import java.util.Map;
 public class MetadataExceptionHandler {
 
     @ExceptionHandler(FailedToExtractRequestedFieldsException.class)
-    public ResponseEntity<Object> handleIllegalContentTypeException(FailedToExtractRequestedFieldsException ex) {
+    public ResponseEntity<Object> handleIllegalContentTypeException(final FailedToExtractRequestedFieldsException ex) {
         return handleError(HttpStatus.PRECONDITION_FAILED, List.of(ex.getMessage()));
     }
 
-    private ResponseEntity<Object> handleError(HttpStatus status, List<String> errors) {
-        Map<String, Object> body = new LinkedHashMap<>();
+    private ResponseEntity<Object> handleError(final HttpStatus status, final List<String> errors) {
+        final Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", new Date());
         body.put("status", status.value());
         body.put("errors", errors);

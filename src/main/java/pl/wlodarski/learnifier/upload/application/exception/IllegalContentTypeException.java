@@ -1,7 +1,7 @@
 package pl.wlodarski.learnifier.upload.application.exception;
 
 public class IllegalContentTypeException extends RuntimeException {
-    public IllegalContentTypeException(String message) {
+    public IllegalContentTypeException(final String message) {
         super(message);
     }
 }
