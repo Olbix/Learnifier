@@ -51,7 +51,7 @@ public class MetadataController {
     private String obtainResponseFromMapper(final ObjectMapper om, final MetadataResponse metadataResponse) throws JsonProcessingException {
         final String response = om.writeValueAsString(metadataResponse);
         if (EMPTY_JSON.equals(response)) {
-            throw new FailedToExtractRequestedFieldsException("Requested fields does not exist!: Chose at least one of: fileName, size, contentType");
+            throw new FailedToExtractRequestedFieldsException("Requested fields do not exist!: Chose at least one of: fileName, size, contentType");
         } else {
             return response;
         }
