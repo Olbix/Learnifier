@@ -22,14 +22,11 @@ public enum UploadStatus {
     READY {
         @Override
         public UpdateStatusResult updateStatus(final UploadStatus status) {
-            switch (status) {
-                case PROCESSING:
-                    return UpdateStatusResult.ok(PROCESSING);
-                case DELETING:
-                    return UpdateStatusResult.ok(DELETING);
-                default:
-                    return super.updateStatus(status);
-            }
+            return switch (status) {
+                case PROCESSING -> UpdateStatusResult.ok(PROCESSING);
+                case DELETING -> UpdateStatusResult.ok(DELETING);
+                default -> super.updateStatus(status);
+            };
         }
     },
     DELETING {
