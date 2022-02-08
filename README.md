@@ -1,6 +1,7 @@
 # Learnifier
 
-How add support for additional mimes? just adjust 'update.types' property
+How add support for additional mimes?. adjust 'update.types' property
+e.g.
 upload.types=image/png,image/jpeg,image/gif
 
 What is missing?
